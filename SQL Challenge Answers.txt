@@ -1,0 +1,128 @@
+#############Loading Tables by 2nd method
+##### Reporter_Details Table query###
+
+USE [DS]
+GO
+
+/****** Object:  Table [dbo].[RBDB]    Script Date: 7/30/2022 12:25:58 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Rporter_detail](
+	[Row_ID] [int] NOT NULL,
+	[bug_id] [int] NOT NULL,
+	[reporter_id] [int] NOT NULL,
+	[reporter_department] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_Rporter_Detail] PRIMARY KEY CLUSTERED 
+(
+	[Row_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+Insert into[dbo].[Rporter_detail]
+Select[Row_ID],
+	[bug_id],
+	[reporter_id],
+	[reporter_department]
+from [dbo].[RBDB]
+
+
+################################################
+--DATE_Tracker Data Table Query
+
+USE [DS]
+GO
+
+/****** Object:  Table [dbo].[RBDB]    Script Date: 7/30/2022 12:25:58 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Date_Tracker](
+	[Row_ID] [int] NOT NULL,
+	[bug_id] [int] NOT NULL,
+	[created] [date] NOT NULL,
+	[resolved] [date] NOT NULL,
+	[existence_days] [int] NOT NULL,
+ CONSTRAINT [PK_Date_Tracker] PRIMARY KEY CLUSTERED 
+(
+	[Row_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+Insert into[dbo].[Date_Tracker]
+Select
+	[Row_ID],
+	[bug_id],
+	[created],
+	[resolved],
+	[existence_days]
+from [dbo].[RBDB]
+
+##################################################################
+--- BUG_TRACKER data table query
+
+USE [DS]
+GO
+
+/****** Object:  Table [dbo].[RBDB]    Script Date: 7/30/2022 12:25:58 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Bug_Tracker](
+	[Row_ID] [int] NOT NULL,
+	[bug_id] [int] NOT NULL,
+	[resolution_id] [nvarchar](50) NULL,
+	[type_id] [nvarchar](50) NOT NULL,
+	
+ CONSTRAINT [PK_Bug_Tracker] PRIMARY KEY CLUSTERED 
+(
+	[Row_ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+Insert into[dbo].[Bug_Tracker]
+Select
+	[Row_ID],
+	[bug_id],
+	[resolution_id],
+	[type_id]
+from [dbo].[RBDB]
+
+
+
+
+##########################################################################################################
+
+2. Write a line of code that would create the existence days column from the "tableau_test_data.csv" sheet
+ 
+   select [created], [resolved], 
+   DATEDIFF(day, [created], [resolved]) AS Existence_Days from [dbo].[Date_Tracker]
+
+
+
+###############################################################################
+3. Create a script that will provide the following details using only 3 columns.
+ 
+
+ select count (a.resolution_id) as Resolutioncount,
+	 month(b.created) as createdMonth 
+	from [dbo].[Bug_Tracker] A join [dbo].[Date_Tracker] B on
+	a.[bug_id] = b.[bug_id] group by month(b.created) order by month(b.created)
+
+
+#############################END###################################################
+
+
+###################################################################################################3
